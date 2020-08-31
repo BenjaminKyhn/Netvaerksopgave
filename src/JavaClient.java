@@ -2,6 +2,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class JavaClient {
     DataOutputStream toServer = null;
@@ -20,9 +21,9 @@ public class JavaClient {
             fromServer = new DataInputStream(socket.getInputStream());
 
             try {
-                toServer.writeUTF("test");
-                String test = fromServer.readUTF();
-                System.out.println(test);
+                byte[] test = fromServer.readAllBytes();
+                String string = new String(test, StandardCharsets.UTF_8);
+                System.out.println(string);
             } catch (IOException ex1){
                 ex1.printStackTrace();
             }
