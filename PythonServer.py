@@ -18,11 +18,10 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.bind((HOST, PORT))
     s.listen()        
     while True:
-        print('test')
         print(read())
         data = read()
         conn, addr = s.accept()
         print('Connected by', addr)
         data2 = str(data)
-        conn.send(data2.encode('utf-8'))
+        conn.sendall(data2.encode('utf-8'))
         conn.close()
