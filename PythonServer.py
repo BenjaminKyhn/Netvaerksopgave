@@ -19,12 +19,10 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.listen()        
     while True:
         print('test')
-        print(read())        
+        print(read())
+        data = read()
         conn, addr = s.accept()
         print('Connected by', addr)
-        data = conn.recv(1024)
-        if not data:
-            break
-        conn.sendall(data)
+        data2 = str(data)
+        conn.send(data2.encode('utf-8'))
         conn.close()
-        
