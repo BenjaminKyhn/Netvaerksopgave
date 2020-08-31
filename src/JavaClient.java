@@ -14,21 +14,22 @@ public class JavaClient {
         new JavaClient();
     }
 
-    public JavaClient(){
+    public JavaClient() {
         try {
-            Socket socket = new Socket(host, port);
-            toServer = new DataOutputStream(socket.getOutputStream());
-            fromServer = new DataInputStream(socket.getInputStream());
+            while (true) {
+                Socket socket = new Socket(host, port);
+                toServer = new DataOutputStream(socket.getOutputStream());
+                fromServer = new DataInputStream(socket.getInputStream());
 
-            try {
                 byte[] test = fromServer.readAllBytes();
+                fromServer.close();
                 String string = new String(test, StandardCharsets.UTF_8);
                 System.out.println(string);
-            } catch (IOException ex1){
-                ex1.printStackTrace();
+                Thread.sleep(2000);
             }
-        } catch (IOException ex2){
-            ex2.printStackTrace();
+        } catch (IOException | InterruptedException ex1) {
+            ex1.printStackTrace();
         }
     }
 }
+
