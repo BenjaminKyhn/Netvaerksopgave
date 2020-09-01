@@ -18,13 +18,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 public class JavaClient {
-    DataOutputStream toServer = null;
-    DataInputStream fromServer = null;
-    String host = "192.168.1.6";
-    int port = 65432;
-
-    TimeSeries series1 = new TimeSeries("Temperatur");
-    TimeSeries series2 = new TimeSeries("Luftfugtighed");
+    private DataOutputStream toServer = null;
+    private DataInputStream fromServer = null;
+    private String host = "192.168.1.6";
+    private int port = 65432;
+    private TimeSeries series1 = new TimeSeries("Temperatur");
+    private TimeSeries series2 = new TimeSeries("Luftfugtighed");
 
     public static void main(String[] args) {
         new JavaClient();
@@ -42,23 +41,29 @@ public class JavaClient {
                 fromServer = new DataInputStream(socket.getInputStream());
                 toServer = new DataOutputStream(socket.getOutputStream());
 
-                // Get temperature
+                // Hent data fra serveren
                 byte[] data = fromServer.readAllBytes();
                 fromServer.close();
+
+                // Formater data
                 String dataStr = new String(data, StandardCharsets.UTF_8);
                 String tempStr = dataStr.substring(0, 4);
                 String humStr = dataStr.substring(4, 8);
                 double temp = Double.parseDouble(tempStr);
                 double hum = Double.parseDouble(humStr);
+
+                // Print data til konsollen
                 System.out.println(temp);
                 System.out.println(hum);
 
+                // Tilføj punktet til grafen
                 Date date = new Date();
                 Second second = new Second(date);
                 series1.add(second, temp);
                 series2.add(second, hum);
 
-                Thread.sleep(2000);
+                // Sleep tråden i en halv time
+                Thread.sleep(1800000);
             }
         } catch (IOException | InterruptedException ex1) {
             ex1.printStackTrace();
@@ -71,35 +76,41 @@ public class JavaClient {
         }
 
         private void initUI() {
-            //create the datasets
+            // Opret datasæt
             TimeSeriesCollection dataset1 = new TimeSeriesCollection();
             TimeSeriesCollection dataset2 = new TimeSeriesCollection();
             dataset1.addSeries(series1);
             dataset2.addSeries(series2);
 
-            //construct the plot
+            // Lav kurven
             XYPlot plot = new XYPlot();
             plot.setDataset(0, dataset1);
             plot.setDataset(1, dataset2);
 
-            //customize the plot with renderers and axis
             plot.setRenderer(0, new XYSplineRenderer());//use default fill paint for first series
             XYSplineRenderer splinerenderer = new XYSplineRenderer();
             splinerenderer.setSeriesFillPaint(0, Color.BLUE);
             plot.setRenderer(1, splinerenderer);
-            plot.setRangeAxis(0, new NumberAxis("Grader (°)(°)"));
-            plot.setRangeAxis(1, new NumberAxis("Procent (%)"));
+
+            // Lav venstre Y-akse
+            NumberAxis degreeAxis = new NumberAxis("Grader (°)");
+            degreeAxis.setRange(10, 30);
+            plot.setRangeAxis(0, degreeAxis);
+
+            // Lav højre Y-akse
+            NumberAxis percentAxis = new NumberAxis("Procent (%)");
+            percentAxis.setRange(30, 50);
+            plot.setRangeAxis(1, percentAxis);
+
             plot.setDomainAxis(new DateAxis("Tid"));
 
-            //Map the data to the appropriate axis
+            // Forbind plot med den rigtige Y-akse
             plot.mapDatasetToRangeAxis(0, 0);
             plot.mapDatasetToRangeAxis(1, 1);
 
-            //generate the chart
             JFreeChart chart = new JFreeChart("Temperatur & Luftfugtighed", getFont(), plot, true);
             chart.setBackgroundPaint(Color.WHITE);
 
-            // NEW PART THAT MAKES IT WORK
             ChartPanel chartPanel = new ChartPanel(chart);
             chartPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
             chartPanel.setBackground(Color.white);
