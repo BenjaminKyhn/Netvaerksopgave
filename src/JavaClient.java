@@ -18,20 +18,16 @@ public class JavaClient {
         try {
             while (true) {
                 Socket socket = new Socket(host, port);
-                toServer = new DataOutputStream(socket.getOutputStream());
                 fromServer = new DataInputStream(socket.getInputStream());
 
                 // Get temperature
-                byte[] temp = fromServer.readAllBytes();
+                byte[] data = fromServer.readAllBytes();
                 fromServer.close();
-                String tempStr = new String(temp, StandardCharsets.UTF_8);
-                System.out.println(tempStr);
-
-//                // Get humidity
-//                byte[] hum = fromServer.readAllBytes();
-//                fromServer.close();
-//                String humStr = new String(hum, StandardCharsets.UTF_8);
-//                System.out.println(humStr);
+                String dataStr = new String(data, StandardCharsets.UTF_8);
+                String tempStr = dataStr.substring(0, 4);
+                String humStr = dataStr.substring(4,8);
+                double temp = Double.parseDouble(tempStr);
+                double hum = Double.parseDouble(humStr);
 
                 Thread.sleep(2000);
             }
