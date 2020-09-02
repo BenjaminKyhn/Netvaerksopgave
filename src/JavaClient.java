@@ -74,11 +74,8 @@ public class JavaClient {
                 Second second = new Second(date);
                 series1.add(second, temp);
                 series2.add(second, hum);
-
-                // Sleep tråden i en halv time
-                Thread.sleep(1800000);
             }
-        } catch (IOException | InterruptedException ex1) {
+        } catch (IOException ex1) {
             ex1.printStackTrace();
         }
     }
