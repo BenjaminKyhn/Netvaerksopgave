@@ -107,12 +107,12 @@ public class JavaClient {
 
             // Lav venstre Y-akse
             NumberAxis degreeAxis = new NumberAxis("Grader (°)");
-            degreeAxis.setRange(10, 30);
+            degreeAxis.setRange(0, 30);
             plot.setRangeAxis(0, degreeAxis);
 
             // Lav højre Y-akse
             NumberAxis percentAxis = new NumberAxis("Procent (%)");
-            percentAxis.setRange(30, 50);
+            percentAxis.setRange(0, 100);
             plot.setRangeAxis(1, percentAxis);
 
             DateAxis timeAxis = new DateAxis("Tid");
