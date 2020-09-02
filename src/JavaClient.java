@@ -15,6 +15,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class JavaClient {
@@ -30,7 +31,7 @@ public class JavaClient {
     }
 
     public JavaClient() {
-        SwingUtilities.invokeLater( () -> {
+        SwingUtilities.invokeLater(() -> {
             Graf ex = new Graf();
             ex.setVisible(true);
         });
@@ -49,15 +50,27 @@ public class JavaClient {
                 String dataStr = new String(data, StandardCharsets.UTF_8);
                 String tempStr = dataStr.substring(0, 4);
                 String humStr = dataStr.substring(4, 8);
+                String timeStr = dataStr.substring(8);
+                String[] time = timeStr.split(":");
                 double temp = Double.parseDouble(tempStr);
                 double hum = Double.parseDouble(humStr);
+                int hours = Integer.parseInt(time[0]);
+                int mins = Integer.parseInt(time[1]);
+                int secs = Integer.parseInt(time[2]);
 
                 // Print data til konsollen
                 System.out.println(temp);
                 System.out.println(hum);
+                for (int i = 0; i < time.length; i++) {
+                    System.out.println(time[i]);
+                }
 
                 // Tilføj punktet til grafen
                 Date date = new Date();
+                date.setHours(hours);
+                date.setMinutes(mins);
+                date.setSeconds(secs);
+
                 Second second = new Second(date);
                 series1.add(second, temp);
                 series2.add(second, hum);
@@ -102,7 +115,9 @@ public class JavaClient {
             percentAxis.setRange(30, 50);
             plot.setRangeAxis(1, percentAxis);
 
-            plot.setDomainAxis(new DateAxis("Tid"));
+            DateAxis timeAxis = new DateAxis("Tid");
+            timeAxis.setDateFormatOverride(new SimpleDateFormat("hh:mm"));
+            plot.setDomainAxis(timeAxis);
 
             // Forbind plot med den rigtige Y-akse
             plot.mapDatasetToRangeAxis(0, 0);
