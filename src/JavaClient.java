@@ -104,7 +104,7 @@ public class JavaClient {
 
             // Lav venstre Y-akse
             NumberAxis degreeAxis = new NumberAxis("Grader (°)");
-            degreeAxis.setRange(0, 30);
+            degreeAxis.setRange(0, 50);
             plot.setRangeAxis(0, degreeAxis);
 
             // Lav højre Y-akse
