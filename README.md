@@ -17,3 +17,5 @@ data'ene over flere gange, men det skabte problemer. Derfor skal data'ene format
 separate variable. Disse variable bruger vi så til at tegne vores graf.
 Vi endte med ikke at bruge JavaFX, da vi fandt et library kaldet JFree Chart, der havde alle de ønskede features og var forholdsvis nemt at gå til. JFree Chart bruger Java Swing
 fremfor JavaFX, så derfor endte løsningen med at bruge dette.
+
+<img src="https://i.imgur.com/2LaVTDz.jpg"">
