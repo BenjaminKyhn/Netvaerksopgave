@@ -25,6 +25,7 @@ public class JavaClient {
     private int port = 65432;
     private TimeSeries series1 = new TimeSeries("Temperatur");
     private TimeSeries series2 = new TimeSeries("Luftfugtighed");
+    private String key = "boooooooooooomer"; // skal være 16 tegn
 
     public static void main(String[] args) {
         new JavaClient();
@@ -47,10 +48,16 @@ public class JavaClient {
                 fromServer.close();
 
                 // Formater data
-                String dataStr = new String(data, StandardCharsets.UTF_8);
-                String tempStr = dataStr.substring(0, 4);
-                String humStr = dataStr.substring(4, 8);
-                String timeStr = dataStr.substring(8);
+                String encryptedStr = new String(data, StandardCharsets.UTF_8);
+                System.out.println(encryptedStr);
+
+                AESCrypt decrypter = new AESCrypt();
+                String decryptedStr = decrypter.decrypt(key, encryptedStr);
+                System.out.println(decryptedStr);
+
+                String tempStr = decryptedStr.substring(0, 4);
+                String humStr = decryptedStr.substring(4, 8);
+                String timeStr = decryptedStr.substring(8);
                 String[] time = timeStr.split(":");
                 double temp = Double.parseDouble(tempStr);
                 double hum = Double.parseDouble(humStr);
