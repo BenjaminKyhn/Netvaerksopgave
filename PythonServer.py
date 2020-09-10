@@ -38,3 +38,5 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         conn.send((temp + hum + timeStr).encode('utf-8'))
         conn.close()
         time.sleep(900000)
+
+# https://www.novixys.com/blog/using-aes-encryption-decryption-python-pycrypto/ til at kryptere strengen
